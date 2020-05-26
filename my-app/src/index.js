@@ -143,7 +143,269 @@ function calculateWinner(squares) {
 
 // ========================================
 
+// function tick() {
+	// 	const element = (
+	// 		<div>
+	// 			<h1>Hello, Chonky!</h1>
+	// 			<h2>It is {new Date().toLocaleTimeString()}</h2>.
+	// 		</div>
+	// 	);
+	// 	ReactDOM.render(
+	// 		element,
+	// 		document.getElementById('root')
+	// 	);
+	// }
+	
+	// setInterval(tick, 1000);
+
+
+// User-defined components
+function Welcome(propsi) {
+	return <h1>Hello, {propsi.name} {propsi.last}</h1>;
+}
+// const element = <Welcom name="Si" last="Chonky" />;
+
+// Multiple user defined components
+function App() {
+	return (
+		<dvi>
+			<Welcome name="Si" last="Chonky" />
+			<Welcome name="Adrian" last="Chonky" />
+		</dvi>
+	);
+}
+
+// Component extract
+function formatDate(date) {
+	return date.toLocaleDateString();
+}
+
+function Avatar(props) {
+	return (
+		<img className="Avatar" 
+			src={props.user.avatarUrl}
+			alt={props.user.name}
+		/>
+	);
+}
+
+function UserInfo(props) {
+	return (
+		<div className="UserInfo">
+			<Avatar user={props.user} />
+			<div className="UserInfo-name">
+				{props.user.name}
+			</div>
+		</div>
+	);
+}
+
+function Comment(props) {
+	return (
+		<div className="Comment">
+			<UserInfo user={props.author} />
+			<div className="Comment-text">{props.text}</div>
+			<div className="Comment.date">
+				{formatDate(props.date)}
+			</div>
+		</div>
+	);
+}
+
+const comment = {
+	date: new Date(),
+	text: "Chonky boy so cute!",
+	author: {
+		name: 'Sibastian Sichonky',
+		avatarUrl: 'https://placekitten.com/g/64/64',
+	},
+};
+
+// STATES and LIFECYCLE
+class Clock extends React.Component {
+	// Class constructor that initializes state
+	constructor(props) {
+		super(props);
+		this.state = {
+			date: new Date(),
+			name: 'Sichonky',
+		};
+	}	
+
+	// It's important to free up resources taken by components when they are destroyed
+	// 'Mounting' = set up a timer whenever the Clock is rendered to the DOM for the first time
+	componentDidMount() {
+		this.timerID = setInterval(
+			() => this.tick(),
+			1000
+		);
+	}
+	// 'Unmounting' = clear the timer
+	// If the Clock compoent is ever removed from the DOM, 
+	// React calls the componentWillUnmount() lifecycle method so the timer is stopped
+	componentWillUnmount() {
+		clearInterval(this.timerID);
+	}
+
+	tick() {
+		this.setState({
+			date: new Date()
+		});
+	}
+
+	render() {
+		return (
+			<div>
+				<h1>Hello, {this.state.name}!</h1>
+				{/* Add local state */}
+				<h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+			</div>
+		);
+	}
+}
+
+function ActionLink() {
+	function handleClick(e) {
+		e.preventDefault();
+		console.log('The link was clicked');
+	}
+
+	return (
+		<a href="#" onClick={handleClick}>
+			Click Si
+		</a>
+	);
+}
+
+class Toggle extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {isToggleOn: true};
+		// This binding is necessary to make 'this' work in the callback
+		this.handleClick = this.handleClick.bind(this);
+	}
+
+	handleClick() {
+		this.setState(state => ({
+			isToggleOn: !state.isToggleOn
+		}));
+	}
+
+	render() {
+		return (
+			// Generally, if you refer to a method without () after it, such as this.handleClice, you should bind that method
+			<button onClick={this.handleClick}>
+				{this.state.isToggleOn ? 'ON' : 'OFF'}
+			</button>
+		)
+	}
+}
+
+// class Greeting extends React.Component {
+// 	constructor(props) {
+// 		super(props);
+// 	}
+
+// 	UserGreeting(props) {
+// 		return <h1>Welcome back!</h1>;
+// 	}
+
+// 	GuestGreeting(props) {
+// 		return <h1>Please sign up.</h1>
+// 	}
+
+// 	render() {
+// 		if(this.props.isLoggedIn) {
+// 			return <userGreeting />;
+// 		}
+// 		return <GuestGreeting />;
+// 	}
+// }
+function UserGreeting(props) {
+	return <h1>Welcome back!</h1>;
+}
+
+function GuestGreeting(props) {
+	return <h1>Please sign up.</h1>;
+}
+
+function Greeting(props) {
+	const isLoggedIn = props.isLoggedIn;
+	if (isLoggedIn) {
+		return <UserGreeting />;
+	} else {
+		return <GuestGreeting />;
+	}
+}
+
+// ELEMENT VARIABLES
+function LoginButton(props) {
+	return (
+		<button onClick={props.onClicke}>
+			Login
+		</button>
+	);
+}
+
+function LogoutButton(props) {
+	return (
+		<button onClick={props.onClicke}>
+			Logout
+		</button>
+	)
+}
+
+class LoginControl extends React.Component {
+	constructor(props) {
+		super(props);
+		this.handleLoginClick = this.handleLoginClick.bind(this);
+		this.handleLogoutClick = this.handleLogoutClick.bind(this);
+		this.state = {isLoggedIn: false};
+	}
+
+	handleLoginClick() {
+		this.setState({isLoggedIn: true});
+	}
+
+	handleLogoutClick() {
+		this.setState({isLoggedIn: false});
+	}
+
+	render() {
+		const isLoggedIn = this.state.isLoggedIn;
+		console.log(isLoggedIn);
+		let button;
+		if(isLoggedIn) {
+			button = <LogoutButton onClicke={this.handleLogoutClick} />;
+		} else {
+			button = <LoginButton onClicke={this.handleLoginClick} />;
+		}
+
+		return (
+			<div>
+				<Greeting isLoggedIn={isLoggedIn} />
+				{button}
+			</div>
+		);
+	}
+}
+
+function Mailbox(props) {
+	const unreadMessages = props.unreadMessages;
+	return (
+		<div>
+			<h1>Hello!</h1>
+			{unreadMessages.length > 0 && <h2>You have {unreadMessages.length} unread messages</h2>
+			}
+		</div>
+	);
+}
+
+const messages = [];
+
 ReactDOM.render(
-	<Game />,
+	<Mailbox unreadMessages={messages} />,
 	document.getElementById('root')
 );
+
+
