@@ -724,10 +724,32 @@ class Calculator extends React.Component {
 	}
 }
 
+// CONTAINMENT
+function FancyBorder(props) {
+	return (
+		<div className={'FancyBorder FancyBorder-' + props.color}>
+			{props.children}
+		</div>
+	)
+}
+function WelcomeDialog(props) {
+	return (
+		<FancyBorder color={props.color}>
+			<h1 className="Dialog-title">
+				Welcome
+			</h1>
+			<p className="Dialog-message">
+				Thank you for visiting our spacecraft!
+			</p>
+		</FancyBorder>
+	)
+}
+
+
 //------------------------------------------------------
 
 ReactDOM.render(
-	<Calculator />,
+	<WelcomeDialog color="red" />,
 	document.getElementById('root')
 );
 
